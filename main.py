@@ -3,7 +3,6 @@ from fastapi import FastAPI,HTTPException,status,Depends
 import psycopg2
 #from app.database import engine,get_db
 from router import scrape,user,Auth
-
 app = FastAPI()
 
 # Include the scrape router
