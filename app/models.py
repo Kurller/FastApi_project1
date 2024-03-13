@@ -2,7 +2,6 @@ from sqlalchemy import Column, ForeignKey, Integer, String, TIMESTAMP
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from app.database import Base, engine
-
 class Scrape(Base):
     __tablename__ = 'scrape'
     id = Column(Integer, primary_key=True)
