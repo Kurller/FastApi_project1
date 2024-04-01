@@ -1,1 +1,1 @@
-http://54.87.156.144:8000/docs
+https://fastapi-project1-od9p.onrender.com/docs
