@@ -14,12 +14,13 @@ router = APIRouter(prefix="/get_data", tags=['Scraped-Data'])
 class ScrapeBase(BaseModel):
     companyNames: str
     job_titles: str
+    location:str
 
 class ScrapeCreate(ScrapeBase):
     pass
 
 @router.get("/")
-def test_post(db: Session = Depends(get_db), user_id: int = Depends(oAuth.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+def test_post(db: Session = Depends(get_db), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
     test_data = db.query(DBScrape).filter(DBScrape.companyNames.contains(search)).limit(limit).offset(skip).all()
     result = db.query(models.User.id, models.User.email, func.count(models.Scrape.id).label('scrape_count')) \
                     .outerjoin(models.Scrape, models.User.id == models.Scrape.user_id) \

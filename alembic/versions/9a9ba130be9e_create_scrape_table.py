@@ -19,7 +19,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade():
     op.create_table('scrape',sa.Column('id',sa.Integer(),nullable=False,primary_key=True),
-                    sa.Column('companyNames',sa.String(),nullable=False))
+                    sa.Column('companyNames',sa.String(),nullable=False),sa.Column('job_titles',sa.String(),nullable=False),
+                    sa.Column('location',sa.String(),nullable=False))
     pass
 
 

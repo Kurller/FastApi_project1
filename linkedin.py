@@ -34,45 +34,35 @@ def Linkedin_func():
         password.send_keys('Adebola@12345')
         login.click()
         time.sleep(3)
-        driver.get("https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3833638833&discoveryOrigin=JOBS_HOME_JYMBII")
         
-        job_elements = driver.find_elements(By.CLASS_NAME, "base-card__full-link")
-        
-        
-        
-        # List to store job titles
+        # Navigate to LinkedIn jobs page
+        driver.get("https://www.linkedin.com/jobs/search/?currentJobId=3897542940&f_TPR=r86400&origin=JOB_SEARCH_PAGE_JOB_FILTER&refresh=true")
+
+        # Extract job titles, locations, and company names
+        job_elements = driver.find_elements(By.CLASS_NAME, 'job-card-container__link')
+        location_elements = driver.find_elements(By.CLASS_NAME, 'job-card-container__metadata-item')
+        company_elements = driver.find_elements(By.CLASS_NAME, 'job-card-container__primary-description')
+
+        company_names = []
         job_titles = []
-        for job_element in job_elements:
-            # Get text of each job element and append to job_titles list
+        locations = []
+
+        for job_element, location_element, company_element in zip(job_elements, location_elements, company_elements):
             job_titles.append(job_element.text)
-            # Print job element
-        print(job_titles)
-        print()
-            #print(job_element.text)
-            # Print total number of job titles
-        print("Total number of jobs:", len(job_titles))
-        company_elements = driver.find_elements(By.XPATH, '//h4/a')
-        companyNames =[]
-        for x in company_elements:
-            companyNames.append(x.text)
-        print(companyNames)
-        print()
-        print("total no of company :", len(companyNames))  
-        loca_elements = driver.find_elements(By.CLASS_NAME, '//h4/a')
-        locNames =[]
-        for x in loca_elements:
-            locNames.append(x.text)
-        print(locNames)
-        print()
-        print("total no of company :", len(locNames))  
-        companyfinal= pd.DataFrame(companyNames,columns=["companyNames"])
-        titlefinal=pd.DataFrame(job_titles,columns=["job_titles"])
-        final=companyfinal.join(titlefinal)
-        
-        print(final)
+            locations.append(location_element.text)
+            company_names.append(company_element.text)
+
+# Create DataFrames after accumulating the values
+        companyfinal = pd.DataFrame(company_names, columns=["companyNames"])
+        titlefinal = pd.DataFrame(job_titles, columns=["job_titles"])
+        locationfinal = pd.DataFrame(locations, columns=['location'])
+
+# Concatenate the DataFrames along the columns axis
+        result = pd.concat([companyfinal, titlefinal, locationfinal], axis=1)
+        print (result)
         #final.to_csv(r'C:\Users\kolawole\Downloads\archive\linkedinjob2.csv')
         engine = create_engine('postgresql://postgres:1234@localhost/Fastapi')
-        final.to_sql('scrape_table',engine,if_exists='append',index=False)    
+        result.to_sql('scrape',engine,if_exists='append',index=False)    
     except Exception as e:
            print(e)
 
